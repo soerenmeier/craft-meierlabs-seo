@@ -3,7 +3,7 @@ name: Publish npm Package
 on:
   push:
     tags:
-      - 'meierlabs-seo@v*.*.*' # the npm package, e.g. meierlabs-seo@v1.0.0
+      - 'meierlabs-seo@v*.*.*' # the npm package, e.g. meierlabs-seo@v0.1.0-alpha.0
 
 env:
   # The first publish runs with the NPM_TOKEN secret and without
@@ -79,9 +79,9 @@ jobs:
             ARGS="--provenance"
           fi
 
-          # Check if the version is a prerelease (contains a hyphen, e.g., 1.1.0-alpha.0)
+          # Check if the version is a prerelease (contains a hyphen, e.g., 0.2.0-alpha.0)
           if [[ "${VERSION}" == *-* ]]; then
-            # Extract the identifier (gets 'alpha' from '1.1.0-alpha.0' or 'rc' from '1.0.0-rc.1')
+            # Extract the identifier (gets 'alpha' from '0.2.0-alpha.0' or 'rc' from '0.2.0-rc.1')
             DIST_TAG=$(echo "${VERSION}" | awk -F'-' '{print $2}' | awk -F'.' '{print $1}')
 
             # Fallback to 'next' if extraction is empty
