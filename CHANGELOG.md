@@ -1,5 +1,9 @@
 # Release Notes for Meier Labs SEO
 
+## Unreleased
+
+- npm: `<Seo>` no longer accepts `seoJson` as a JSON string (plugin versions before 0.1.0-alpha.2), `parseSeo` is removed
+
 ## 0.1.0-alpha.2 - 2026-10-28
 
 - `seoJson` returns a JSON object (custom scalar `MeierLabsSeoJson`) instead of a JSON string, so neither Craft nor the frontend encodes and parses it again; the npm package still accepts strings

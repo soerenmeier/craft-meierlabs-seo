@@ -3,12 +3,9 @@
 	the head. Pass `seoJson` of the entry (or `seo { title meta links jsonLd }`).
 -->
 <script lang="ts">
-	import { parseSeo } from './parse.js';
 	import type { SeoData } from './types.js';
 
-	let { seo: raw }: { seo: SeoData | string | null | undefined } = $props();
-
-	const seo = $derived(parseSeo(raw));
+	let { seo }: { seo: SeoData | null | undefined } = $props();
 
 	// `<` is escaped so the JSON can't close the script tag
 	const jsonLd = $derived(
