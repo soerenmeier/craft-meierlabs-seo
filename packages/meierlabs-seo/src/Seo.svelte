@@ -32,7 +32,11 @@
 			{/if}
 		{/each}
 		{#each seo.links ?? [] as link, i (i)}
-			<link rel={link.rel} href={link.href} hreflang={link.hreflang ?? undefined} />
+			<link
+				rel={link.rel}
+				href={link.href}
+				hreflang={link.hreflang ?? undefined}
+			/>
 		{/each}
 		{@html jsonLd}
 	{/if}

@@ -2,7 +2,7 @@
 	"name": "meierlabs-seo",
 	"version": "1.0.0",
 	"description": "Crelte frontend for the Meier Labs SEO Craft CMS plugin: head tags, sitemaps and robots.txt.",
-	"author": "Sören Meier",
+	"author": "S\u00f6ren Meier",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"repository": {
 		"type": "git",
@@ -19,7 +19,9 @@
 		"check": "svelte-check",
 		"build": "svelte-package -i ./src",
 		"watch": "svelte-package -i ./src -w",
-		"prepack": "npm run build"
+		"prepack": "npm run build",
+		"check-fmt": "prettier -c .",
+		"fmt": "prettier -w ."
 	},
 	"exports": {
 		".": {
@@ -40,6 +42,8 @@
 		"@sveltejs/package": "^2.5.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"crelte": "^0.6.0-alpha.2",
+		"prettier": "^3.3.0",
+		"prettier-plugin-svelte": "^3.2.6",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",

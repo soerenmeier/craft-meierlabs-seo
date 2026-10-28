@@ -1,0 +1,99 @@
+name: Publish npm Package
+
+on:
+  push:
+    tags:
+      - 'meierlabs-seo@v*.*.*' # the npm package, e.g. meierlabs-seo@v1.0.0
+
+env:
+  # The first publish runs with the NPM_TOKEN secret and without
+  # provenance. Afterwards set up Trusted Publishing for the package on
+  # npmjs.com and set this to 'true'.
+  PROVENANCE: 'false'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # Allow reading the repository content
+      id-token: write # Required for provenance and Trusted Publishing
+    container:
+      image: node:24
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Parse Tag
+        run: |
+          # Extract the tag name (e.g., meierlabs-seo@v1.2.0)
+          TAG_NAME="${GITHUB_REF##*/}"
+          PACKAGE_SHORT_NAME="${TAG_NAME%@*}"
+          VERSION="${TAG_NAME#*@v}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "PACKAGE_FOLDER=packages/${PACKAGE_SHORT_NAME}" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      # install latest npm for Trusted Publishing
+      - run: npm install -g npm@latest
+
+      - name: Check Version
+        shell: bash
+        run: |
+          cd ${PACKAGE_FOLDER}
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [[ "${PKG_VERSION}" != "${VERSION}" ]]; then
+            echo "Tag version ${VERSION} does not match package.json version ${PKG_VERSION}"
+            exit 1
+          fi
+
+      - name: Install Dependencies
+        run: |
+          cd ${PACKAGE_FOLDER}
+          npm ci
+
+      - name: Build
+        run: |
+          cd ${PACKAGE_FOLDER}
+          npm run build
+
+      - name: Check errors
+        run: |
+          cd ${PACKAGE_FOLDER}
+          npm run check
+
+      - name: Publish to npm
+        shell: bash
+        run: |
+          cd ${PACKAGE_FOLDER}
+          echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
+
+          ARGS=""
+          if [[ "${PROVENANCE}" == "true" ]]; then
+            ARGS="--provenance"
+          fi
+
+          # Check if the version is a prerelease (contains a hyphen, e.g., 1.1.0-alpha.0)
+          if [[ "${VERSION}" == *-* ]]; then
+            # Extract the identifier (gets 'alpha' from '1.1.0-alpha.0' or 'rc' from '1.0.0-rc.1')
+            DIST_TAG=$(echo "${VERSION}" | awk -F'-' '{print $2}' | awk -F'.' '{print $1}')
+
+            # Fallback to 'next' if extraction is empty
+            if [[ -z "${DIST_TAG}" ]]; then
+              DIST_TAG="next"
+            fi
+
+            echo "Prerelease detected. Publishing with --tag ${DIST_TAG}"
+            npm publish ${ARGS} --tag ${DIST_TAG}
+          else
+            echo "Stable release detected. Publishing to latest tag."
+            npm publish ${ARGS}
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
