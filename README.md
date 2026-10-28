@@ -47,7 +47,8 @@ npm install meierlabs-seo@alpha
 ```
 
 Every entry has a `seoJson` field in GraphQL with everything the package
-needs as JSON, so new versions of the package don't need query changes. Add
+needs as one JSON object (no selection set needed), so new versions of the
+package don't need query changes. Add
 it to the entry query:
 
 ```graphql
@@ -87,7 +88,7 @@ export async function routes(router) {
 For pages without an entry, the root query `seoJson(siteId: Int, site: String)`
 returns the global SEO of a site.
 
-To use single values in the frontend, `parseSeo(entry.seoJson)` returns
+To use single values in the frontend, `entry.seoJson` has
 `title`, `description`, `canonical`, `robots`, `image`, `socialImage`,
 `alternates`, ... The same fields are also available as a GraphQL type with
 `seo { ... }` and the root query `seo(siteId: Int)`.

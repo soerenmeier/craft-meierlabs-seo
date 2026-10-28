@@ -231,11 +231,6 @@ class SeoResult
 		];
 	}
 
-	public function toJson(): string
-	{
-		return Json::encode($this->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-	}
-
 	public function getJsonLdString(): string
 	{
 		return Json::encode($this->getJsonLd(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

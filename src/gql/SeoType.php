@@ -3,6 +3,7 @@
 namespace soerenmeier\meierlabsseo\gql;
 
 use craft\gql\GqlEntityRegistry;
+use GraphQL\Type\Definition\CustomScalarType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use soerenmeier\meierlabsseo\models\SeoResult;
@@ -58,6 +59,21 @@ class SeoType
 					'resolve' => fn(SeoResult $seo) => $seo->getJsonLdString(),
 				],
 			],
+		]));
+	}
+
+	/**
+	 * A JSON value, returned as a nested object instead of a string, so
+	 * neither Craft nor the frontend needs to encode and parse it.
+	 */
+	public static function jsonType(): CustomScalarType
+	{
+		return GqlEntityRegistry::getOrCreate('MeierLabsSeoJson', fn() => new CustomScalarType([
+			'name' => 'MeierLabsSeoJson',
+			'description' => 'A JSON value (Meier Labs SEO).',
+			'serialize' => fn($value) => $value,
+			'parseValue' => fn($value) => $value,
+			'parseLiteral' => fn($node) => null,
 		]));
 	}
 

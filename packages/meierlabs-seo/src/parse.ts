@@ -1,8 +1,8 @@
 import type { SeoData } from './types.js';
 
 /**
- * Parses `seoJson` (a JSON string) into its data, objects from
- * `seo { ... }` are returned as they are.
+ * Returns the data of `seoJson` or `seo { ... }`. Both are objects, JSON
+ * strings (`seoJson` before 0.1.0-alpha.2) are parsed.
  */
 export function parseSeo(
 	seo: SeoData | string | null | undefined,

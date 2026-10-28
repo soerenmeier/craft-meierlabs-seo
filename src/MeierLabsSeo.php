@@ -98,7 +98,7 @@ class MeierLabsSeo extends Plugin
 		);
 
 		// every entry gets a `seo` field with the resolved SEO and
-		// `seoJson` with all of it as JSON (what the npm package reads)
+		// `seoJson` with all of it as one JSON object (what the npm package reads)
 		Event::on(
 			TypeManager::class,
 			TypeManager::EVENT_DEFINE_GQL_TYPE_FIELDS,
@@ -120,10 +120,10 @@ class MeierLabsSeo extends Plugin
 
 				$event->fields['seoJson'] = [
 					'name' => 'seoJson',
-					'type' => Type::string(),
-					'description' => 'The resolved SEO of the entry as JSON, for the meierlabs-seo npm package.',
+					'type' => SeoType::jsonType(),
+					'description' => 'The resolved SEO of the entry as one JSON object, for the meierlabs-seo npm package.',
 					'resolve' => fn($source) => $source instanceof Entry
-						? $this->seo->resolveEntry($source)->toJson()
+						? $this->seo->resolveEntry($source)->toArray()
 						: null,
 				];
 			}
@@ -147,10 +147,10 @@ class MeierLabsSeo extends Plugin
 				];
 
 				$event->queries['seoJson'] = [
-					'type' => Type::string(),
+					'type' => SeoType::jsonType(),
 					'args' => $args,
-					'description' => 'The global SEO of a site as JSON, for pages without an entry.',
-					'resolve' => fn($root, array $args) => $this->resolveSiteArgs($args)?->toJson(),
+					'description' => 'The global SEO of a site as one JSON object, for pages without an entry.',
+					'resolve' => fn($root, array $args) => $this->resolveSiteArgs($args)?->toArray(),
 				];
 			}
 		);
