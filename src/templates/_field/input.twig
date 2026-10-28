@@ -1,0 +1,102 @@
+{% import '_includes/forms' as forms %}
+
+{% set image = value.getImage() %}
+{% set socialImage = value.getSocialImage() %}
+
+<div class="mlseo-field"
+	{% if defaults %}
+		data-mlseo-field
+		data-title-prefix="{{ defaults.titlePrefix }}"
+		data-title-suffix="{{ defaults.titleSuffix }}"
+		data-default-title="{{ defaults.title }}"
+		data-default-description="{{ defaults.description }}"
+		data-url="{{ defaults.url }}"
+	{% endif %}
+>
+	{% if defaults %}
+		<div class="mlseo-preview" aria-hidden="true">
+			<div class="mlseo-preview__site">{{ defaults.siteName }}</div>
+			<div class="mlseo-preview__url">{{ defaults.url ?? '' }}</div>
+			<div class="mlseo-preview__title"></div>
+			<div class="mlseo-preview__description"></div>
+		</div>
+	{% endif %}
+
+	{{ forms.textField({
+		label: 'Title',
+		instructions: defaults ? 'Replaces `{title}` in the title pattern: `' ~ defaults.titlePrefix ~ '{title}' ~ defaults.titleSuffix ~ '`' : null,
+		name: name ~ '[title]',
+		value: value.title,
+		placeholder: defaults.title ?? null,
+		inputAttributes: {
+			data: {'mlseo-title': true, 'mlseo-count': 60},
+		},
+	}) }}
+
+	{{ forms.textareaField({
+		label: 'Description',
+		name: name ~ '[description]',
+		value: value.description,
+		placeholder: defaults.description ?? null,
+		rows: 3,
+		inputAttributes: {
+			data: {'mlseo-description': true, 'mlseo-count': 160},
+		},
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Image',
+		instructions: defaults and defaults.image
+			? 'Default: ' ~ defaults.image.title
+			: null,
+		name: name ~ '[imageId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: image ? [image] : [],
+	}) }}
+
+	<details class="mlseo-advanced"{% if value.socialTitle or value.socialDescription or socialImage or value.robots or value.canonicalUrl %} open{% endif %}>
+		<summary>Social and advanced</summary>
+
+		{{ forms.textField({
+			label: 'Social Title',
+			instructions: 'When shared (Open Graph), defaults to the title.',
+			name: name ~ '[socialTitle]',
+			value: value.socialTitle,
+		}) }}
+
+		{{ forms.textareaField({
+			label: 'Social Description',
+			name: name ~ '[socialDescription]',
+			value: value.socialDescription,
+			rows: 2,
+		}) }}
+
+		{{ forms.elementSelectField({
+			label: 'Social Image',
+			name: name ~ '[socialImageId]',
+			elementType: 'craft\\elements\\Asset',
+			criteria: {kind: ['image']},
+			limit: 1,
+			elements: socialImage ? [socialImage] : [],
+		}) }}
+
+		{{ forms.selectField({
+			label: 'Robots',
+			instructions: defaults ? 'Inherited: `' ~ defaults.robots ~ '`' : null,
+			name: name ~ '[robots]',
+			options: robotsOptions,
+			value: value.robots ?? '',
+		}) }}
+
+		{{ forms.textField({
+			label: 'Canonical URL',
+			instructions: 'Only if this page is a copy of another one; it is then left out of the sitemap.',
+			name: name ~ '[canonicalUrl]',
+			value: value.canonicalUrl,
+			placeholder: defaults.canonicalUrl ?? null,
+			type: 'url',
+		}) }}
+	</details>
+</div>

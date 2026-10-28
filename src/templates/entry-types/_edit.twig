@@ -1,0 +1,75 @@
+{% extends 'meierlabs-seo/_layout' %}
+{% import '_includes/forms' as forms %}
+
+{% set title = type.name|t('site') %}
+{% set selectedSubnavItem = 'entry-types' %}
+{% set fullPageForm = true %}
+{% set crumbs = [
+	{label: 'SEO', url: cpUrl('meierlabs-seo')},
+	{label: 'Entry Types', url: cpUrl('meierlabs-seo/entry-types', {site: site.handle})},
+] %}
+
+{% block content %}
+	{{ actionInput('meierlabs-seo/cp/save-entry-type') }}
+	{{ redirectInput('meierlabs-seo/entry-types?site=' ~ site.handle) }}
+	{{ hiddenInput('siteId', site.id) }}
+	{{ hiddenInput('entryType', type.handle) }}
+
+	<p class="readable light">Empty fields use the section settings, then the global settings.</p>
+
+	{{ forms.selectField({
+		label: 'Robots',
+		name: 'settings[robots]',
+		options: robotsOptions,
+		value: data.robots ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Title Pattern',
+		instructions: include('meierlabs-seo/_includes/patternHelp'),
+		name: 'settings[titlePattern]',
+		value: data.titlePattern ?? '',
+		placeholder: globals.titlePattern,
+		class: 'code',
+	}) }}
+
+	<hr>
+
+	{{ forms.selectField({
+		label: 'Description from Field',
+		instructions: 'Take the description from this field (text only, shortened to 160 characters). The SEO field of an entry still wins.',
+		name: 'settings[descriptionField]',
+		options: [{label: 'None', value: ''}]|merge(textFields),
+		value: data.descriptionField ?? '',
+	}) }}
+
+	{{ forms.textareaField({
+		label: 'Description',
+		instructions: 'Used when the field above is empty or not set.',
+		name: 'settings[description]',
+		value: data.description ?? '',
+		rows: 3,
+		inputAttributes: {
+			data: {'mlseo-count': 160},
+		},
+	}) }}
+
+	{{ forms.selectField({
+		label: 'Image from Field',
+		instructions: 'Take the first image of this field.',
+		name: 'settings[imageField]',
+		options: [{label: 'None', value: ''}]|merge(imageFields),
+		value: data.imageField ?? '',
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Image',
+		instructions: 'Used when the field above is empty or not set.',
+		name: 'settings[imageId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: image ? [image] : [],
+		viewMode: 'large',
+	}) }}
+{% endblock %}

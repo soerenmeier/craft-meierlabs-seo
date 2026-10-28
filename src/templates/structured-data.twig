@@ -1,0 +1,230 @@
+{% extends 'meierlabs-seo/_layout' %}
+{% import '_includes/forms' as forms %}
+
+{% set title = 'Structured Data' %}
+{% set selectedSubnavItem = 'structured-data' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+	{{ actionInput('meierlabs-seo/cp/save-structured-data') }}
+	{{ redirectInput('meierlabs-seo/structured-data') }}
+
+	<p class="readable light">
+		The company behind the site and who built it, the same for all sites.
+		They become the Organization and WebSite in the JSON-LD of every page.
+	</p>
+
+	<h2>Company</h2>
+
+	{{ forms.selectField({
+		label: 'Type',
+		instructions: 'The most specific schema.org type that fits, e.g. MedicalClinic for a doctor’s practice.',
+		name: 'settings[type]',
+		options: typeOptions,
+		value: data.type ?? 'Organization',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Name',
+		instructions: 'Without a name no Organization is added.',
+		name: 'settings[name]',
+		value: data.name ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Alternate Name',
+		name: 'settings[alternateName]',
+		value: data.alternateName ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Legal Name',
+		name: 'settings[legalName]',
+		value: data.legalName ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'URL',
+		instructions: 'Defaults to the site URL.',
+		name: 'settings[url]',
+		value: data.url ?? '',
+		type: 'url',
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Logo',
+		name: 'settings[logoId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: logo ? [logo] : [],
+	}) }}
+
+	{{ forms.textareaField({
+		label: 'Description',
+		name: 'settings[description]',
+		value: data.description ?? '',
+		rows: 3,
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Image',
+		instructions: 'A photo of the business, e.g. the building or the team.',
+		name: 'settings[imageId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: image ? [image] : [],
+	}) }}
+
+	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
+		<div class="flex-grow">
+			{{ forms.textField({
+				label: 'Email',
+				name: 'settings[email]',
+				value: data.email ?? '',
+				type: 'email',
+			}) }}
+		</div>
+		<div class="flex-grow">
+			{{ forms.textField({
+				label: 'Phone',
+				name: 'settings[telephone]',
+				value: data.telephone ?? '',
+				placeholder: '+41 33 123 45 67',
+			}) }}
+		</div>
+	</div>
+
+	{{ forms.textField({
+		label: 'Street',
+		name: 'settings[street]',
+		value: data.street ?? '',
+	}) }}
+
+	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
+		<div>
+			{{ forms.textField({
+				label: 'Postal Code',
+				name: 'settings[postalCode]',
+				value: data.postalCode ?? '',
+				size: 8,
+			}) }}
+		</div>
+		<div class="flex-grow">
+			{{ forms.textField({
+				label: 'Locality',
+				name: 'settings[locality]',
+				value: data.locality ?? '',
+			}) }}
+		</div>
+		<div>
+			{{ forms.textField({
+				label: 'Region',
+				name: 'settings[region]',
+				value: data.region ?? '',
+				size: 8,
+				placeholder: 'BE',
+			}) }}
+		</div>
+		<div>
+			{{ forms.textField({
+				label: 'Country',
+				name: 'settings[country]',
+				value: data.country ?? '',
+				size: 4,
+				placeholder: 'CH',
+			}) }}
+		</div>
+	</div>
+
+	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
+		<div>
+			{{ forms.textField({
+				label: 'Latitude',
+				name: 'settings[latitude]',
+				value: data.latitude ?? '',
+				size: 12,
+				placeholder: '46.75807',
+			}) }}
+		</div>
+		<div>
+			{{ forms.textField({
+				label: 'Longitude',
+				name: 'settings[longitude]',
+				value: data.longitude ?? '',
+				size: 12,
+				placeholder: '7.62846',
+			}) }}
+		</div>
+		<div>
+			{{ forms.textField({
+				label: 'Price Range',
+				name: 'settings[priceRange]',
+				value: data.priceRange ?? '',
+				size: 6,
+				placeholder: '$$',
+			}) }}
+		</div>
+	</div>
+
+	{{ forms.editableTableField({
+		label: 'Opening Hours',
+		instructions: 'One row per day and time span, times like 08:00. Mostly useful for local businesses.',
+		id: 'openingHours',
+		name: 'settings[openingHours]',
+		cols: {
+			day: {heading: 'Day', type: 'select', options: dayOptions},
+			opens: {heading: 'Opens', type: 'singleline', placeholder: '08:00'},
+			closes: {heading: 'Closes', type: 'singleline', placeholder: '17:00'},
+		},
+		rows: data.openingHours ?? [],
+		allowAdd: true,
+		allowDelete: true,
+		allowReorder: true,
+		addRowLabel: 'Add opening hours',
+	}) }}
+
+	{{ forms.editableTableField({
+		label: 'Profiles',
+		instructions: 'Social media and other profiles of the company (sameAs), e.g. Instagram, LinkedIn or Google Maps.',
+		id: 'sameAs',
+		name: 'settings[sameAs]',
+		cols: {
+			url: {heading: 'URL', type: 'url'},
+		},
+		rows: data.sameAs ?? [],
+		allowAdd: true,
+		allowDelete: true,
+		allowReorder: true,
+		addRowLabel: 'Add a profile',
+	}) }}
+
+	<hr>
+
+	<h2>Creator</h2>
+	<p class="light">Who built the site, added as creator of the WebSite.</p>
+
+	{{ forms.selectField({
+		label: 'Type',
+		name: 'settings[creatorType]',
+		options: [
+			{label: 'Organization', value: 'Organization'},
+			{label: 'Person', value: 'Person'},
+		],
+		value: data.creatorType ?? 'Organization',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Name',
+		name: 'settings[creatorName]',
+		value: data.creatorName ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'URL',
+		name: 'settings[creatorUrl]',
+		value: data.creatorUrl ?? '',
+		type: 'url',
+	}) }}
+{% endblock %}

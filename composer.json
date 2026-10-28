@@ -1,0 +1,41 @@
+{
+	"name": "soerenmeier/meierlabs-seo",
+	"description": "SEO for headless Craft CMS sites built with crelte.",
+	"type": "craft-plugin",
+	"license": "proprietary",
+	"support": {
+		"source": "https://github.com/soerenmeier/craft-meierlabs-seo"
+	},
+	"authors": [
+		{
+			"name": "Sören Meier",
+			"homepage": "https://github.com/soerenmeier"
+		}
+	],
+	"require": {
+		"php": ">=8.2",
+		"craftcms/cms": "^5.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"soerenmeier\\meierlabsseo\\": "src/"
+		}
+	},
+	"extra": {
+		"handle": "meierlabs-seo",
+		"name": "Meier Labs SEO",
+		"developer": "Sören Meier",
+		"documentationUrl": "",
+		"class": "soerenmeier\\meierlabsseo\\MeierLabsSeo"
+	},
+	"config": {
+		"sort-packages": true,
+		"platform": {
+			"php": "8.2"
+		},
+		"allow-plugins": {
+			"yiisoft/yii2-composer": true,
+			"craftcms/plugin-installer": true
+		}
+	}
+}

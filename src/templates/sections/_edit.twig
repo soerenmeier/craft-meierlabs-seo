@@ -1,0 +1,63 @@
+{% extends 'meierlabs-seo/_layout' %}
+{% import '_includes/forms' as forms %}
+
+{% set title = section.name|t('site') %}
+{% set selectedSubnavItem = 'sections' %}
+{% set fullPageForm = true %}
+{% set crumbs = [
+	{label: 'SEO', url: cpUrl('meierlabs-seo')},
+	{label: 'Sections', url: cpUrl('meierlabs-seo/sections', {site: site.handle})},
+] %}
+
+{% block content %}
+	{{ actionInput('meierlabs-seo/cp/save-section') }}
+	{{ redirectInput('meierlabs-seo/sections?site=' ~ site.handle) }}
+	{{ hiddenInput('siteId', site.id) }}
+	{{ hiddenInput('section', section.handle) }}
+
+	<p class="readable light">Empty fields use the global settings.</p>
+
+	{{ forms.lightswitchField({
+		label: 'Include in Sitemap',
+		instructions: 'Entries with `noindex` or a canonical URL to another page are always left out.',
+		name: 'settings[sitemap]',
+		on: data.sitemap ?? true,
+	}) }}
+
+	{{ forms.selectField({
+		label: 'Robots',
+		name: 'settings[robots]',
+		options: robotsOptions,
+		value: data.robots ?? '',
+	}) }}
+
+	{{ forms.textField({
+		label: 'Title Pattern',
+		instructions: include('meierlabs-seo/_includes/patternHelp'),
+		name: 'settings[titlePattern]',
+		value: data.titlePattern ?? '',
+		placeholder: globals.titlePattern,
+		class: 'code',
+	}) }}
+
+	{{ forms.textareaField({
+		label: 'Description',
+		name: 'settings[description]',
+		value: data.description ?? '',
+		placeholder: globals.description,
+		rows: 3,
+		inputAttributes: {
+			data: {'mlseo-count': 160},
+		},
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Image',
+		name: 'settings[imageId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: image ? [image] : [],
+		viewMode: 'large',
+	}) }}
+{% endblock %}

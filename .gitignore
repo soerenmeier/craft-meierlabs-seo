@@ -1,0 +1,10 @@
+*.DS_Store
+*.idea/*
+*.log
+*Thumbs.db
+.env
+node_modules
+/vendor
+/SECRET.md
+packages/*/dist
+.svelte-kit

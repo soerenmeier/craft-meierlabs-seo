@@ -1,0 +1,14 @@
+{% extends '_layouts/cp' %}
+
+{% if site is defined and craft.app.isMultiSite %}
+	{% set crumbs = (crumbs ?? [])|unshift({
+		id: 'site-crumb',
+		icon: 'world',
+		iconAltText: 'Site'|t('app'),
+		label: site.name|t('site'),
+		menu: {
+			items: siteMenuItems(craft.app.sites.getEditableSites(), site),
+			label: 'Select site'|t('app'),
+		},
+	}) %}
+{% endif %}

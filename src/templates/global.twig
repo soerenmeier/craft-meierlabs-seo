@@ -1,0 +1,93 @@
+{% extends 'meierlabs-seo/_layout' %}
+{% import '_includes/forms' as forms %}
+
+{% set title = 'Global SEO' %}
+{% set selectedSubnavItem = 'global' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+	{{ actionInput('meierlabs-seo/cp/save-global') }}
+	{{ redirectInput('meierlabs-seo/global?site=' ~ site.handle) }}
+	{{ hiddenInput('siteId', site.id) }}
+
+	{% if not isPrimary %}
+		<p class="readable light">Empty fields use the values of the primary site, except the description and robots.txt.</p>
+	{% endif %}
+
+	{% if not indexingAllowed %}
+		<div class="readable" style="margin-bottom: 24px">
+			<p class="warning with-icon">
+				Search engines are blocked in this environment (<code>{{ craft.app.env }}</code>):
+				every page gets <code>noindex, nofollow</code> and robots.txt disallows everything.
+				Indexing is only allowed in <code>production</code>, change it with
+				<code>allowIndexing</code> in <code>config/meierlabs-seo.php</code>.
+			</p>
+		</div>
+	{% endif %}
+
+	{{ forms.textField({
+		label: 'Site Name',
+		instructions: 'Used in titles (`{siteName}`), og:site_name and the structured data.',
+		name: 'settings[siteName]',
+		value: data.siteName ?? '',
+		placeholder: defaults.siteName,
+	}) }}
+
+	{{ forms.textField({
+		label: 'Title Pattern',
+		instructions: 'How page titles are built. ' ~ include('meierlabs-seo/_includes/patternHelp'),
+		name: 'settings[titlePattern]',
+		value: data.titlePattern ?? '',
+		placeholder: defaults.titlePattern,
+		class: 'code',
+	}) }}
+
+	{{ forms.textareaField({
+		label: 'Description',
+		instructions: 'Used when neither the entry, its entry type nor its section has one. About 150 characters.',
+		name: 'settings[description]',
+		value: data.description ?? '',
+		rows: 3,
+		inputAttributes: {
+			data: {'mlseo-count': 160},
+		},
+	}) }}
+
+	{{ forms.elementSelectField({
+		label: 'Image',
+		instructions: 'Shown when the page is shared, cropped to 1200×630.',
+		name: 'settings[imageId]',
+		elementType: 'craft\\elements\\Asset',
+		criteria: {kind: ['image']},
+		limit: 1,
+		elements: image ? [image] : [],
+		viewMode: 'large',
+	}) }}
+
+	{{ forms.selectField({
+		label: 'Robots',
+		instructions: 'The default for all pages.',
+		name: 'settings[robots]',
+		options: robotsOptions,
+		value: data.robots ?? (isPrimary ? 'index, follow' : ''),
+	}) }}
+
+	{{ forms.textField({
+		label: 'X (Twitter) Handle',
+		name: 'settings[twitterHandle]',
+		value: data.twitterHandle ?? '',
+		placeholder: '@handle',
+	}) }}
+
+	<hr>
+
+	{{ forms.textareaField({
+		label: 'robots.txt',
+		instructions: 'Rules for `/robots.txt` of this site’s domain (the primary site of a domain wins). Empty allows everything. The sitemap line is added automatically.',
+		name: 'settings[robotsTxt]',
+		value: data.robotsTxt ?? '',
+		rows: 5,
+		class: 'code',
+		placeholder: "User-agent: *\nDisallow:",
+	}) }}
+{% endblock %}
