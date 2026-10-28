@@ -1,6 +1,6 @@
 {
 	"name": "meierlabs-seo",
-	"version": "0.1.0-alpha.0",
+	"version": "0.1.0-alpha.1",
 	"description": "Crelte frontend for the Meier Labs SEO Craft CMS plugin: head tags, sitemaps and robots.txt.",
 	"author": "S\u00f6ren Meier",
 	"license": "SEE LICENSE IN LICENSE.md",
