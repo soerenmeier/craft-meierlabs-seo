@@ -89,8 +89,8 @@ jobs:
             fi
 
             echo "Prerelease detected. Publishing with --tag ${DIST_TAG}"
-            npm publish ${ARGS} --tag ${DIST_TAG}
+            npm publish ${ARGS} --tag ${DIST_TAG} --loglevel verbose
           else
             echo "Stable release detected. Publishing to latest tag."
-            npm publish ${ARGS}
+            npm publish ${ARGS} --loglevel verbose
           fi
