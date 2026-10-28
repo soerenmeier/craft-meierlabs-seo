@@ -46,29 +46,14 @@ settings under SEO in the control panel. Non-admins need the permission
 npm install meierlabs-seo@alpha
 ```
 
-Every entry has a `seo` field in GraphQL. Add it to the entry query:
+Every entry has a `seoJson` field in GraphQL with everything the package
+needs as JSON, so new versions of the package don't need query changes. Add
+it to the entry query:
 
 ```graphql
-fragment Seo on MeierLabsSeo {
-  title
-  meta {
-    name
-    property
-    content
-  }
-  links {
-    rel
-    href
-    hreflang
-  }
-  jsonLd
-}
-
 query ($uri: [String], $siteId: [QueryArgument]) {
   entry(uri: $uri, siteId: $siteId) {
-    seo {
-      ...Seo
-    }
+    seoJson
   }
 }
 ```
@@ -83,7 +68,7 @@ Render it in `App.svelte`:
 	let entry = $derived($route.entry);
 </script>
 
-<Seo seo={entry?.seo} />
+<Seo seo={entry?.seoJson} />
 ```
 
 And serve the sitemaps and robots.txt in `server.js`:
@@ -99,12 +84,13 @@ export async function routes(router) {
 `/sitemap.xml` lists a sitemap per site and section
 (`/sitemap-<site>-<section>-<page>.xml`) for all sites on the domain of the request.
 
-For pages without an entry, the root query `seo(siteId: Int, site: String)`
+For pages without an entry, the root query `seoJson(siteId: Int, site: String)`
 returns the global SEO of a site.
 
-The other fields of `seo` (`description`, `canonical`, `robots`, `image`,
-`socialImage`, `alternates`, ...) are there if the frontend needs them
-separately.
+To use single values in the frontend, `parseSeo(entry.seoJson)` returns
+`title`, `description`, `canonical`, `robots`, `image`, `socialImage`,
+`alternates`, ... The same fields are also available as a GraphQL type with
+`seo { ... }` and the root query `seo(siteId: Int)`.
 
 ## Configuration
 

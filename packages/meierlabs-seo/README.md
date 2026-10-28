@@ -9,7 +9,7 @@ robots.txt.
 	import { Seo } from 'meierlabs-seo';
 </script>
 
-<Seo seo={entry?.seo} />
+<Seo seo={entry?.seoJson} />
 ```
 
 ```js
@@ -21,4 +21,4 @@ export async function routes(router) {
 }
 ```
 
-See the plugin README for the GraphQL fragment.
+Add `seoJson` to the entry query, see the plugin README.

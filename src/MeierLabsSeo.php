@@ -21,6 +21,7 @@ use GraphQL\Type\Definition\Type;
 use soerenmeier\meierlabsseo\assetbundles\CpAsset;
 use soerenmeier\meierlabsseo\fields\SeoField;
 use soerenmeier\meierlabsseo\gql\SeoType;
+use soerenmeier\meierlabsseo\models\SeoResult;
 use soerenmeier\meierlabsseo\models\Settings;
 use soerenmeier\meierlabsseo\services\Seo;
 use soerenmeier\meierlabsseo\services\Sitemap;
@@ -96,7 +97,8 @@ class MeierLabsSeo extends Plugin
 			}
 		);
 
-		// every entry gets a `seo` field with the resolved SEO
+		// every entry gets a `seo` field with the resolved SEO and
+		// `seoJson` with all of it as JSON (what the npm package reads)
 		Event::on(
 			TypeManager::class,
 			TypeManager::EVENT_DEFINE_GQL_TYPE_FIELDS,
@@ -115,6 +117,15 @@ class MeierLabsSeo extends Plugin
 						? $this->seo->resolveEntry($source)
 						: null,
 				];
+
+				$event->fields['seoJson'] = [
+					'name' => 'seoJson',
+					'type' => Type::string(),
+					'description' => 'The resolved SEO of the entry as JSON, for the meierlabs-seo npm package.',
+					'resolve' => fn($source) => $source instanceof Entry
+						? $this->seo->resolveEntry($source)->toJson()
+						: null,
+				];
 			}
 		);
 
@@ -123,26 +134,38 @@ class MeierLabsSeo extends Plugin
 			Gql::class,
 			Gql::EVENT_REGISTER_GQL_QUERIES,
 			function (RegisterGqlQueriesEvent $event) {
+				$args = [
+					'siteId' => Type::int(),
+					'site' => Type::string(),
+				];
+
 				$event->queries['seo'] = [
 					'type' => SeoType::getType(),
-					'args' => [
-						'siteId' => Type::int(),
-						'site' => Type::string(),
-					],
+					'args' => $args,
 					'description' => 'The global SEO of a site, for pages without an entry.',
-					'resolve' => function ($root, array $args) {
-						$sites = Craft::$app->getSites();
-						$site = match (true) {
-							isset($args['siteId']) => $sites->getSiteById($args['siteId']),
-							isset($args['site']) => $sites->getSiteByHandle($args['site']),
-							default => $sites->getPrimarySite(),
-						};
+					'resolve' => fn($root, array $args) => $this->resolveSiteArgs($args),
+				];
 
-						return $site ? $this->seo->resolveSite($site) : null;
-					},
+				$event->queries['seoJson'] = [
+					'type' => Type::string(),
+					'args' => $args,
+					'description' => 'The global SEO of a site as JSON, for pages without an entry.',
+					'resolve' => fn($root, array $args) => $this->resolveSiteArgs($args)?->toJson(),
 				];
 			}
 		);
+	}
+
+	private function resolveSiteArgs(array $args): ?SeoResult
+	{
+		$sites = Craft::$app->getSites();
+		$site = match (true) {
+			isset($args['siteId']) => $sites->getSiteById($args['siteId']),
+			isset($args['site']) => $sites->getSiteByHandle($args['site']),
+			default => $sites->getPrimarySite(),
+		};
+
+		return $site ? $this->seo->resolveSite($site) : null;
 	}
 
 	public function getCpNavItem(): ?array

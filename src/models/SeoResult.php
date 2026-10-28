@@ -207,6 +207,35 @@ class SeoResult
 		return ['@context' => 'https://schema.org', '@graph' => $graph];
 	}
 
+	/**
+	 * Everything the `seo` GraphQL type has, for `seoJson`: the frontend
+	 * gets new fields without changing its query.
+	 */
+	public function toArray(): array
+	{
+		return [
+			'title' => $this->title,
+			'description' => $this->description,
+			'canonical' => $this->canonical,
+			'robots' => $this->robots,
+			'siteName' => $this->siteName,
+			'locale' => $this->getLocale(),
+			'image' => $this->getImageData(),
+			'socialTitle' => $this->socialTitle,
+			'socialDescription' => $this->socialDescription,
+			'socialImage' => $this->getSocialImageData(),
+			'alternates' => $this->alternates,
+			'meta' => $this->getMeta(),
+			'links' => $this->getLinks(),
+			'jsonLd' => $this->getJsonLdString(),
+		];
+	}
+
+	public function toJson(): string
+	{
+		return Json::encode($this->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+	}
+
 	public function getJsonLdString(): string
 	{
 		return Json::encode($this->getJsonLd(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

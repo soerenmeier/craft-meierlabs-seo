@@ -1,12 +1,14 @@
 <!--
 	Renders the title, meta tags, links and JSON-LD of a resolved SEO into
-	the head. Needs `title`, `meta`, `links` and `jsonLd` in the query, see
-	`seoFragment`.
+	the head. Pass `seoJson` of the entry (or `seo { title meta links jsonLd }`).
 -->
 <script lang="ts">
+	import { parseSeo } from './parse.js';
 	import type { SeoData } from './types.js';
 
-	let { seo }: { seo: SeoData | null | undefined } = $props();
+	let { seo: raw }: { seo: SeoData | string | null | undefined } = $props();
+
+	const seo = $derived(parseSeo(raw));
 
 	// `<` is escaped so the JSON can't close the script tag
 	const jsonLd = $derived(

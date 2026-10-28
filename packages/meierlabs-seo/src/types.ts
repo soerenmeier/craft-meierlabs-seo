@@ -1,4 +1,4 @@
-/** `seo { ... }` of an entry or the root `seo(siteId: ...)` query */
+/** `seoJson` parsed, or `seo { ... }` of an entry or the root query */
 export type SeoData = {
 	title?: string | null;
 	description?: string | null;
