@@ -32,7 +32,7 @@ description and robots.txt. Structured data is the same for all sites.
 ## Installation
 
 ```bash
-composer require soerenmeier/meierlabs-seo -w && php craft plugin/install meierlabs-seo
+composer require soerenmeier/meierlabs-seo:^0.1@alpha -w && php craft plugin/install meierlabs-seo
 ```
 
 Then add an SEO field (field type "SEO") to the entry types where editors
@@ -43,7 +43,7 @@ settings under SEO in the control panel. Non-admins need the permission
 ## Crelte
 
 ```bash
-npm install meierlabs-seo
+npm install meierlabs-seo@alpha
 ```
 
 Every entry has a `seo` field in GraphQL. Add it to the entry query:

@@ -7,9 +7,8 @@ on:
 
 env:
   # Publishing uses npm Trusted Publishing (no token). npm only adds
-  # provenance for public repositories: set this to 'true' once the repo
-  # is public.
-  PROVENANCE: 'false'
+  # provenance for public repositories.
+  PROVENANCE: 'true'
 
 jobs:
   publish:
