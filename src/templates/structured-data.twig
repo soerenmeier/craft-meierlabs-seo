@@ -1,75 +1,83 @@
 {% extends 'meierlabs-seo/_layout' %}
 {% import '_includes/forms' as forms %}
 
-{% set title = 'Structured Data' %}
+{% set title = 'Structured Data'|t('meierlabs-seo') %}
 {% set selectedSubnavItem = 'structured-data' %}
 {% set fullPageForm = true %}
+
+{% set type = data.type ?? 'Organization' %}
+{% set isLocal = type in localTypes %}
+{% set isPerson = type == 'Person' %}
 
 {% block content %}
 	{{ actionInput('meierlabs-seo/cp/save-structured-data') }}
 	{{ redirectInput('meierlabs-seo/structured-data') }}
 
 	<p class="readable light">
-		The company behind the site and who built it, the same for all sites.
-		They become the Organization and WebSite in the JSON-LD of every page.
+		{{ 'The company behind the site and who built it, the same for all sites. They become the Organization and WebSite in the JSON-LD of every page.'|t('meierlabs-seo') }}
 	</p>
 
-	<h2>Company</h2>
+	<h2>{{ 'Company'|t('meierlabs-seo') }}</h2>
 
 	{{ forms.selectField({
-		label: 'Type',
-		instructions: 'The most specific schema.org type that fits, e.g. MedicalClinic for a doctor’s practice.',
+		label: 'Type'|t('meierlabs-seo'),
+		instructions: 'The most specific schema.org type that fits, e.g. Physician for a doctor’s practice. Local businesses also get opening hours, coordinates and a price range.'|t('meierlabs-seo'),
+		id: 'mlseo-type',
 		name: 'settings[type]',
 		options: typeOptions,
-		value: data.type ?? 'Organization',
+		value: type,
 	}) }}
 
 	{{ forms.textField({
-		label: 'Name',
-		instructions: 'Without a name no Organization is added.',
+		label: 'Name'|t('meierlabs-seo'),
+		instructions: 'Without a name no Organization is added.'|t('meierlabs-seo'),
 		name: 'settings[name]',
 		value: data.name ?? '',
 	}) }}
 
 	{{ forms.textField({
-		label: 'Alternate Name',
+		label: 'Alternate Name'|t('meierlabs-seo'),
 		name: 'settings[alternateName]',
 		value: data.alternateName ?? '',
 	}) }}
 
-	{{ forms.textField({
-		label: 'Legal Name',
-		name: 'settings[legalName]',
-		value: data.legalName ?? '',
-	}) }}
+	<div data-mlseo-hide-person{% if isPerson %} class="hidden"{% endif %}>
+		{{ forms.textField({
+			label: 'Legal Name'|t('meierlabs-seo'),
+			name: 'settings[legalName]',
+			value: data.legalName ?? '',
+		}) }}
+	</div>
 
 	{{ forms.textField({
-		label: 'URL',
-		instructions: 'Defaults to the site URL.',
+		label: 'URL'|t('meierlabs-seo'),
+		instructions: 'Defaults to the site URL.'|t('meierlabs-seo'),
 		name: 'settings[url]',
 		value: data.url ?? '',
 		type: 'url',
 	}) }}
 
-	{{ forms.elementSelectField({
-		label: 'Logo',
-		name: 'settings[logoId]',
-		elementType: 'craft\\elements\\Asset',
-		criteria: {kind: ['image']},
-		limit: 1,
-		elements: logo ? [logo] : [],
-	}) }}
+	<div data-mlseo-hide-person{% if isPerson %} class="hidden"{% endif %}>
+		{{ forms.elementSelectField({
+			label: 'Logo'|t('meierlabs-seo'),
+			name: 'settings[logoId]',
+			elementType: 'craft\\elements\\Asset',
+			criteria: {kind: ['image']},
+			limit: 1,
+			elements: logo ? [logo] : [],
+		}) }}
+	</div>
 
 	{{ forms.textareaField({
-		label: 'Description',
+		label: 'Description'|t('meierlabs-seo'),
 		name: 'settings[description]',
 		value: data.description ?? '',
 		rows: 3,
 	}) }}
 
 	{{ forms.elementSelectField({
-		label: 'Image',
-		instructions: 'A photo of the business, e.g. the building or the team.',
+		label: 'Image'|t('meierlabs-seo'),
+		instructions: 'A photo of the business, e.g. the building or the team.'|t('meierlabs-seo'),
 		name: 'settings[imageId]',
 		elementType: 'craft\\elements\\Asset',
 		criteria: {kind: ['image']},
@@ -80,7 +88,7 @@
 	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
 		<div class="flex-grow">
 			{{ forms.textField({
-				label: 'Email',
+				label: 'Email'|t('meierlabs-seo'),
 				name: 'settings[email]',
 				value: data.email ?? '',
 				type: 'email',
@@ -88,7 +96,7 @@
 		</div>
 		<div class="flex-grow">
 			{{ forms.textField({
-				label: 'Phone',
+				label: 'Phone'|t('meierlabs-seo'),
 				name: 'settings[telephone]',
 				value: data.telephone ?? '',
 				placeholder: '+41 33 123 45 67',
@@ -97,7 +105,7 @@
 	</div>
 
 	{{ forms.textField({
-		label: 'Street',
+		label: 'Street'|t('meierlabs-seo'),
 		name: 'settings[street]',
 		value: data.street ?? '',
 	}) }}
@@ -105,7 +113,7 @@
 	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
 		<div>
 			{{ forms.textField({
-				label: 'Postal Code',
+				label: 'Postal Code'|t('meierlabs-seo'),
 				name: 'settings[postalCode]',
 				value: data.postalCode ?? '',
 				size: 8,
@@ -113,14 +121,14 @@
 		</div>
 		<div class="flex-grow">
 			{{ forms.textField({
-				label: 'Locality',
+				label: 'Locality'|t('meierlabs-seo'),
 				name: 'settings[locality]',
 				value: data.locality ?? '',
 			}) }}
 		</div>
 		<div>
 			{{ forms.textField({
-				label: 'Region',
+				label: 'Region'|t('meierlabs-seo'),
 				name: 'settings[region]',
 				value: data.region ?? '',
 				size: 8,
@@ -129,7 +137,7 @@
 		</div>
 		<div>
 			{{ forms.textField({
-				label: 'Country',
+				label: 'Country'|t('meierlabs-seo'),
 				name: 'settings[country]',
 				value: data.country ?? '',
 				size: 4,
@@ -138,75 +146,77 @@
 		</div>
 	</div>
 
-	<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
-		<div>
-			{{ forms.textField({
-				label: 'Latitude',
-				name: 'settings[latitude]',
-				value: data.latitude ?? '',
-				size: 12,
-				placeholder: '46.75807',
-			}) }}
+	<div data-mlseo-local{% if not isLocal %} class="hidden"{% endif %}>
+		<div class="flex flex-nowrap" style="gap: 24px; align-items: flex-start; margin-block: 24px">
+			<div>
+				{{ forms.textField({
+					label: 'Latitude'|t('meierlabs-seo'),
+					name: 'settings[latitude]',
+					value: data.latitude ?? '',
+					size: 12,
+					placeholder: '46.75807',
+				}) }}
+			</div>
+			<div>
+				{{ forms.textField({
+					label: 'Longitude'|t('meierlabs-seo'),
+					name: 'settings[longitude]',
+					value: data.longitude ?? '',
+					size: 12,
+					placeholder: '7.62846',
+				}) }}
+			</div>
+			<div>
+				{{ forms.textField({
+					label: 'Price Range'|t('meierlabs-seo'),
+					name: 'settings[priceRange]',
+					value: data.priceRange ?? '',
+					size: 6,
+					placeholder: '$$',
+				}) }}
+			</div>
 		</div>
-		<div>
-			{{ forms.textField({
-				label: 'Longitude',
-				name: 'settings[longitude]',
-				value: data.longitude ?? '',
-				size: 12,
-				placeholder: '7.62846',
-			}) }}
-		</div>
-		<div>
-			{{ forms.textField({
-				label: 'Price Range',
-				name: 'settings[priceRange]',
-				value: data.priceRange ?? '',
-				size: 6,
-				placeholder: '$$',
-			}) }}
-		</div>
+
+		{{ forms.editableTableField({
+			label: 'Opening Hours'|t('meierlabs-seo'),
+			instructions: 'One row per day and time span, times like 08:00.'|t('meierlabs-seo'),
+			id: 'openingHours',
+			name: 'settings[openingHours]',
+			cols: {
+				day: {heading: 'Day'|t('meierlabs-seo'), type: 'select', options: dayOptions},
+				opens: {heading: 'Opens'|t('meierlabs-seo'), type: 'singleline', placeholder: '08:00'},
+				closes: {heading: 'Closes'|t('meierlabs-seo'), type: 'singleline', placeholder: '17:00'},
+			},
+			rows: data.openingHours ?? [],
+			allowAdd: true,
+			allowDelete: true,
+			allowReorder: true,
+			addRowLabel: 'Add opening hours'|t('meierlabs-seo'),
+		}) }}
 	</div>
 
 	{{ forms.editableTableField({
-		label: 'Opening Hours',
-		instructions: 'One row per day and time span, times like 08:00. Mostly useful for local businesses.',
-		id: 'openingHours',
-		name: 'settings[openingHours]',
-		cols: {
-			day: {heading: 'Day', type: 'select', options: dayOptions},
-			opens: {heading: 'Opens', type: 'singleline', placeholder: '08:00'},
-			closes: {heading: 'Closes', type: 'singleline', placeholder: '17:00'},
-		},
-		rows: data.openingHours ?? [],
-		allowAdd: true,
-		allowDelete: true,
-		allowReorder: true,
-		addRowLabel: 'Add opening hours',
-	}) }}
-
-	{{ forms.editableTableField({
-		label: 'Profiles',
-		instructions: 'Social media and other profiles of the company (sameAs), e.g. Instagram, LinkedIn or Google Maps.',
+		label: 'Profiles'|t('meierlabs-seo'),
+		instructions: 'Social media and other profiles of the company (sameAs), e.g. Instagram, LinkedIn or Google Maps.'|t('meierlabs-seo'),
 		id: 'sameAs',
 		name: 'settings[sameAs]',
 		cols: {
-			url: {heading: 'URL', type: 'url'},
+			url: {heading: 'URL'|t('meierlabs-seo'), type: 'url'},
 		},
 		rows: data.sameAs ?? [],
 		allowAdd: true,
 		allowDelete: true,
 		allowReorder: true,
-		addRowLabel: 'Add a profile',
+		addRowLabel: 'Add a profile'|t('meierlabs-seo'),
 	}) }}
 
 	<hr>
 
-	<h2>Creator</h2>
-	<p class="light">Who built the site, added as creator of the WebSite.</p>
+	<h2>{{ 'Creator'|t('meierlabs-seo') }}</h2>
+	<p class="light">{{ 'Who built the site, added as creator of the WebSite.'|t('meierlabs-seo') }}</p>
 
 	{{ forms.selectField({
-		label: 'Type',
+		label: 'Type'|t('meierlabs-seo'),
 		name: 'settings[creatorType]',
 		options: [
 			{label: 'Organization', value: 'Organization'},
@@ -216,15 +226,32 @@
 	}) }}
 
 	{{ forms.textField({
-		label: 'Name',
+		label: 'Name'|t('meierlabs-seo'),
 		name: 'settings[creatorName]',
 		value: data.creatorName ?? '',
 	}) }}
 
 	{{ forms.textField({
-		label: 'URL',
+		label: 'URL'|t('meierlabs-seo'),
 		name: 'settings[creatorUrl]',
 		value: data.creatorUrl ?? '',
 		type: 'url',
 	}) }}
+
+	{% js %}
+		(() => {
+			const localTypes = {{ localTypes|json_encode|raw }};
+			const select = document.getElementById('mlseo-type');
+			const update = () => {
+				const type = select.value;
+				document.querySelectorAll('[data-mlseo-local]').forEach(el =>
+					el.classList.toggle('hidden', !localTypes.includes(type)),
+				);
+				document.querySelectorAll('[data-mlseo-hide-person]').forEach(el =>
+					el.classList.toggle('hidden', type === 'Person'),
+				);
+			};
+			select.addEventListener('change', update);
+		})();
+	{% endjs %}
 {% endblock %}

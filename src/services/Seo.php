@@ -43,10 +43,10 @@ class Seo extends Component
 		}
 
 		return array_merge($options, [
-			['label' => 'Index, follow links', 'value' => 'index, follow'],
-			['label' => 'No index, follow links', 'value' => 'noindex, follow'],
-			['label' => 'Index, don’t follow links', 'value' => 'index, nofollow'],
-			['label' => 'No index, don’t follow links', 'value' => 'noindex, nofollow'],
+			['label' => Craft::t('meierlabs-seo', 'Index, follow links'), 'value' => 'index, follow'],
+			['label' => Craft::t('meierlabs-seo', 'No index, follow links'), 'value' => 'noindex, follow'],
+			['label' => Craft::t('meierlabs-seo', 'Index, don’t follow links'), 'value' => 'index, nofollow'],
+			['label' => Craft::t('meierlabs-seo', 'No index, don’t follow links'), 'value' => 'noindex, nofollow'],
 		]);
 	}
 
@@ -71,6 +71,25 @@ class Seo extends Component
 			'NGO',
 			'GovernmentOrganization',
 			'Person',
+		];
+	}
+
+	/** types that get opening hours, geo coordinates and a price range */
+	public function localBusinessTypes(): array
+	{
+		return [
+			'LocalBusiness',
+			'ProfessionalService',
+			'MedicalBusiness',
+			'MedicalClinic',
+			'Physician',
+			'Dentist',
+			'LegalService',
+			'FinancialService',
+			'RealEstateAgent',
+			'Store',
+			'Restaurant',
+			'LodgingBusiness',
 		];
 	}
 

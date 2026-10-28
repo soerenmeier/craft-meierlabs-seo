@@ -1,22 +1,22 @@
 {% extends 'meierlabs-seo/_layout' %}
 
-{% set title = 'Sections' %}
+{% set title = 'Sections'|t('meierlabs-seo') %}
 {% set selectedSubnavItem = 'sections' %}
 
 {% block content %}
 	<p class="readable light">
-		Overrides for all entries of a section. Entry types and the SEO field of an entry override them again.
+		{{ 'Overrides for all entries of a section. Entry types and the SEO field of an entry override them again.'|t('meierlabs-seo') }}
 	</p>
 
 	<table class="data fullwidth">
 		<thead>
 			<tr>
-				<th>Section</th>
-				<th>Sitemap</th>
-				<th>Robots</th>
-				<th>Title Pattern</th>
-				<th>Description</th>
-				<th>Image</th>
+				<th>{{ 'Section'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Sitemap'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Robots'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Title Pattern'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Description'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Image'|t('meierlabs-seo') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -26,14 +26,14 @@
 					<th>
 						<a href="{{ cpUrl('meierlabs-seo/sections/' ~ row.section.handle, {site: site.handle}) }}">{{ row.section.name|t('site') }}</a>
 					</th>
-					<td>{% if data.sitemap ?? true %}Yes{% else %}<span class="light">No</span>{% endif %}</td>
-					<td>{% if data.robots ?? false %}{{ data.robots }}{% else %}<span class="light">Inherit</span>{% endif %}</td>
+					<td>{% if data.sitemap ?? true %}{{ 'Yes'|t('meierlabs-seo') }}{% else %}<span class="light">{{ 'No'|t('meierlabs-seo') }}</span>{% endif %}</td>
+					<td>{% if data.robots ?? false %}{{ data.robots }}{% else %}<span class="light">{{ 'Inherit'|t('meierlabs-seo') }}</span>{% endif %}</td>
 					<td><code>{{ data.titlePattern ?? '' }}</code></td>
 					<td>{{ (data.description ?? false) ? '✓' }}</td>
 					<td>{{ (data.imageId ?? false) ? '✓' }}</td>
 				</tr>
 			{% else %}
-				<tr><td colspan="6" class="light">No sections with URLs.</td></tr>
+				<tr><td colspan="6" class="light">{{ 'No sections with URLs.'|t('meierlabs-seo') }}</td></tr>
 			{% endfor %}
 		</tbody>
 	</table>

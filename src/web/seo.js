@@ -21,7 +21,7 @@
 					title +
 					field.dataset.titleSuffix
 				).length;
-				label = ' (full title)';
+				label = ` (${Craft.t('meierlabs-seo', 'full title')})`;
 			} else if (!input.value) {
 				el.textContent = '';
 				return;

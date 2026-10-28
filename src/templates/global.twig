@@ -1,7 +1,7 @@
 {% extends 'meierlabs-seo/_layout' %}
 {% import '_includes/forms' as forms %}
 
-{% set title = 'Global SEO' %}
+{% set title = 'Global SEO'|t('meierlabs-seo') %}
 {% set selectedSubnavItem = 'global' %}
 {% set fullPageForm = true %}
 
@@ -11,31 +11,28 @@
 	{{ hiddenInput('siteId', site.id) }}
 
 	{% if not isPrimary %}
-		<p class="readable light">Empty fields use the values of the primary site, except the description and robots.txt.</p>
+		<p class="readable light">{{ 'Empty fields use the values of the primary site, except the description and robots.txt.'|t('meierlabs-seo') }}</p>
 	{% endif %}
 
 	{% if not indexingAllowed %}
 		<div class="readable" style="margin-bottom: 24px">
 			<p class="warning with-icon">
-				Search engines are blocked in this environment (<code>{{ craft.app.env }}</code>):
-				every page gets <code>noindex, nofollow</code> and robots.txt disallows everything.
-				Indexing is only allowed in <code>production</code>, change it with
-				<code>allowIndexing</code> in <code>config/meierlabs-seo.php</code>.
+				{{ 'Search engines are blocked in this environment ({env}): every page gets noindex, nofollow and robots.txt disallows everything. Indexing is only allowed in production, change it with allowIndexing in config/meierlabs-seo.php.'|t('meierlabs-seo', {env: craft.app.env}) }}
 			</p>
 		</div>
 	{% endif %}
 
 	{{ forms.textField({
-		label: 'Site Name',
-		instructions: 'Used in titles (`{siteName}`), og:site_name and the structured data.',
+		label: 'Site Name'|t('meierlabs-seo'),
+		instructions: 'Used in titles (`{siteName}`), og:site_name and the structured data.'|t('meierlabs-seo'),
 		name: 'settings[siteName]',
 		value: data.siteName ?? '',
 		placeholder: defaults.siteName,
 	}) }}
 
 	{{ forms.textField({
-		label: 'Title Pattern',
-		instructions: 'How page titles are built. ' ~ include('meierlabs-seo/_includes/patternHelp'),
+		label: 'Title Pattern'|t('meierlabs-seo'),
+		instructions: 'How page titles are built.'|t('meierlabs-seo') ~ ' ' ~ include('meierlabs-seo/_includes/patternHelp'),
 		name: 'settings[titlePattern]',
 		value: data.titlePattern ?? '',
 		placeholder: defaults.titlePattern,
@@ -43,8 +40,8 @@
 	}) }}
 
 	{{ forms.textareaField({
-		label: 'Description',
-		instructions: 'Used when neither the entry, its entry type nor its section has one. About 150 characters.',
+		label: 'Description'|t('meierlabs-seo'),
+		instructions: 'Used when neither the entry, its entry type nor its section has one. About 150 characters.'|t('meierlabs-seo'),
 		name: 'settings[description]',
 		value: data.description ?? '',
 		rows: 3,
@@ -54,8 +51,8 @@
 	}) }}
 
 	{{ forms.elementSelectField({
-		label: 'Image',
-		instructions: 'Shown when the page is shared, cropped to 1200×630.',
+		label: 'Image'|t('meierlabs-seo'),
+		instructions: 'Shown when the page is shared, cropped to 1200×630.'|t('meierlabs-seo'),
 		name: 'settings[imageId]',
 		elementType: 'craft\\elements\\Asset',
 		criteria: {kind: ['image']},
@@ -65,15 +62,15 @@
 	}) }}
 
 	{{ forms.selectField({
-		label: 'Robots',
-		instructions: 'The default for all pages.',
+		label: 'Robots'|t('meierlabs-seo'),
+		instructions: 'The default for all pages.'|t('meierlabs-seo'),
 		name: 'settings[robots]',
 		options: robotsOptions,
 		value: data.robots ?? (isPrimary ? 'index, follow' : ''),
 	}) }}
 
 	{{ forms.textField({
-		label: 'X (Twitter) Handle',
+		label: 'X (Twitter) Handle'|t('meierlabs-seo'),
 		name: 'settings[twitterHandle]',
 		value: data.twitterHandle ?? '',
 		placeholder: '@handle',
@@ -82,8 +79,8 @@
 	<hr>
 
 	{{ forms.textareaField({
-		label: 'robots.txt',
-		instructions: 'Rules for `/robots.txt` of this site’s domain (the primary site of a domain wins). Empty allows everything. The sitemap line is added automatically.',
+		label: 'robots.txt'|t('meierlabs-seo'),
+		instructions: 'Rules for `/robots.txt` of this site’s domain (the primary site of a domain wins). Empty allows everything. The sitemap line is added automatically.'|t('meierlabs-seo'),
 		name: 'settings[robotsTxt]',
 		value: data.robotsTxt ?? '',
 		rows: 5,

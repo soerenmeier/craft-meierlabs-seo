@@ -47,7 +47,7 @@ class CpController extends Controller
 			'isPrimary' => $site->primary,
 			'robotsOptions' => $site->primary
 				? $seo->robotsOptions()
-				: $seo->robotsOptions('Inherit from primary site'),
+				: $seo->robotsOptions(Craft::t('meierlabs-seo', 'Inherit from primary site')),
 			'indexingAllowed' => $seo->indexingAllowed(),
 		]);
 	}
@@ -68,7 +68,7 @@ class CpController extends Controller
 			'robotsTxt' => $this->str($data, 'robotsTxt'),
 		]);
 
-		return $this->saved('Global SEO saved.');
+		return $this->saved(Craft::t('meierlabs-seo', 'Global SEO saved.'));
 	}
 
 	public function actionStructuredData(): Response
@@ -81,9 +81,10 @@ class CpController extends Controller
 			'logo' => $seo->asset($data['logoId'] ?? null),
 			'image' => $seo->asset($data['imageId'] ?? null),
 			'dayOptions' => array_map(
-				fn($d) => ['label' => $d, 'value' => $d],
+				fn($d) => ['label' => Craft::t('meierlabs-seo', $d), 'value' => $d],
 				['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 			),
+			'localTypes' => $seo->localBusinessTypes(),
 			'typeOptions' => array_map(
 				fn($t) => ['label' => $t, 'value' => $t],
 				$seo->organizationTypes()
@@ -124,7 +125,7 @@ class CpController extends Controller
 
 		MeierLabsSeo::$plugin->store->save(Store::SCOPE_STRUCTURED_DATA, null, null, $values);
 
-		return $this->saved('Structured data saved.');
+		return $this->saved(Craft::t('meierlabs-seo', 'Structured data saved.'));
 	}
 
 	public function actionSections(): Response
@@ -159,7 +160,7 @@ class CpController extends Controller
 			'data' => $data,
 			'image' => $seo->asset($data['imageId'] ?? null),
 			'globals' => $seo->globals($site),
-			'robotsOptions' => $seo->robotsOptions('Inherit from global'),
+			'robotsOptions' => $seo->robotsOptions(Craft::t('meierlabs-seo', 'Inherit from global')),
 		]);
 	}
 
@@ -178,7 +179,7 @@ class CpController extends Controller
 			'robots' => $this->str($data, 'robots'),
 		]);
 
-		return $this->saved('Section SEO saved.');
+		return $this->saved(Craft::t('meierlabs-seo', 'Section SEO saved.'));
 	}
 
 	public function actionEntryTypes(): Response
@@ -214,7 +215,7 @@ class CpController extends Controller
 			'data' => $data,
 			'image' => $seo->asset($data['imageId'] ?? null),
 			'globals' => $seo->globals($site),
-			'robotsOptions' => $seo->robotsOptions('Inherit from section'),
+			'robotsOptions' => $seo->robotsOptions(Craft::t('meierlabs-seo', 'Inherit from section')),
 			'textFields' => $seo->mappableFields($type, 'text'),
 			'imageFields' => $seo->mappableFields($type, 'image'),
 		]);
@@ -236,7 +237,7 @@ class CpController extends Controller
 			'imageField' => $this->str($data, 'imageField'),
 		]);
 
-		return $this->saved('Entry type SEO saved.');
+		return $this->saved(Craft::t('meierlabs-seo', 'Entry type SEO saved.'));
 	}
 
 	/** sections with urls in the site */

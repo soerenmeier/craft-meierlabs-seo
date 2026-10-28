@@ -117,7 +117,7 @@ class SeoField extends Field
 			'value' => $value,
 			'element' => $element,
 			'defaults' => $defaults,
-			'robotsOptions' => $plugin->seo->robotsOptions('Inherit'),
+			'robotsOptions' => $plugin->seo->robotsOptions(Craft::t('meierlabs-seo', 'Inherit')),
 		]);
 	}
 }

@@ -5,8 +5,8 @@
 {% set selectedSubnavItem = 'entry-types' %}
 {% set fullPageForm = true %}
 {% set crumbs = [
-	{label: 'SEO', url: cpUrl('meierlabs-seo')},
-	{label: 'Entry Types', url: cpUrl('meierlabs-seo/entry-types', {site: site.handle})},
+	{label: 'SEO'|t('meierlabs-seo'), url: cpUrl('meierlabs-seo')},
+	{label: 'Entry Types'|t('meierlabs-seo'), url: cpUrl('meierlabs-seo/entry-types', {site: site.handle})},
 ] %}
 
 {% block content %}
@@ -15,17 +15,17 @@
 	{{ hiddenInput('siteId', site.id) }}
 	{{ hiddenInput('entryType', type.handle) }}
 
-	<p class="readable light">Empty fields use the section settings, then the global settings.</p>
+	<p class="readable light">{{ 'Empty fields use the section settings, then the global settings.'|t('meierlabs-seo') }}</p>
 
 	{{ forms.selectField({
-		label: 'Robots',
+		label: 'Robots'|t('meierlabs-seo'),
 		name: 'settings[robots]',
 		options: robotsOptions,
 		value: data.robots ?? '',
 	}) }}
 
 	{{ forms.textField({
-		label: 'Title Pattern',
+		label: 'Title Pattern'|t('meierlabs-seo'),
 		instructions: include('meierlabs-seo/_includes/patternHelp'),
 		name: 'settings[titlePattern]',
 		value: data.titlePattern ?? '',
@@ -36,16 +36,16 @@
 	<hr>
 
 	{{ forms.selectField({
-		label: 'Description from Field',
-		instructions: 'Take the description from this field (text only, shortened to 160 characters). The SEO field of an entry still wins.',
+		label: 'Description from Field'|t('meierlabs-seo'),
+		instructions: 'Take the description from this field (text only, shortened to 160 characters). The SEO field of an entry still wins.'|t('meierlabs-seo'),
 		name: 'settings[descriptionField]',
-		options: [{label: 'None', value: ''}]|merge(textFields),
+		options: [{label: 'None'|t('meierlabs-seo'), value: ''}]|merge(textFields),
 		value: data.descriptionField ?? '',
 	}) }}
 
 	{{ forms.textareaField({
-		label: 'Description',
-		instructions: 'Used when the field above is empty or not set.',
+		label: 'Description'|t('meierlabs-seo'),
+		instructions: 'Used when the field above is empty or not set.'|t('meierlabs-seo'),
 		name: 'settings[description]',
 		value: data.description ?? '',
 		rows: 3,
@@ -55,16 +55,16 @@
 	}) }}
 
 	{{ forms.selectField({
-		label: 'Image from Field',
-		instructions: 'Take the first image of this field.',
+		label: 'Image from Field'|t('meierlabs-seo'),
+		instructions: 'Take the first image of this field.'|t('meierlabs-seo'),
 		name: 'settings[imageField]',
-		options: [{label: 'None', value: ''}]|merge(imageFields),
+		options: [{label: 'None'|t('meierlabs-seo'), value: ''}]|merge(imageFields),
 		value: data.imageField ?? '',
 	}) }}
 
 	{{ forms.elementSelectField({
-		label: 'Image',
-		instructions: 'Used when the field above is empty or not set.',
+		label: 'Image'|t('meierlabs-seo'),
+		instructions: 'Used when the field above is empty or not set.'|t('meierlabs-seo'),
 		name: 'settings[imageId]',
 		elementType: 'craft\\elements\\Asset',
 		criteria: {kind: ['image']},

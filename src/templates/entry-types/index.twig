@@ -1,23 +1,22 @@
 {% extends 'meierlabs-seo/_layout' %}
 
-{% set title = 'Entry Types' %}
+{% set title = 'Entry Types'|t('meierlabs-seo') %}
 {% set selectedSubnavItem = 'entry-types' %}
 
 {% block content %}
 	<p class="readable light">
-		Overrides for all entries of an entry type, before the section settings.
-		The description and image can also come from a field of the entry type.
+		{{ 'Overrides for all entries of an entry type, before the section settings. The description and image can also come from a field of the entry type.'|t('meierlabs-seo') }}
 	</p>
 
 	<table class="data fullwidth">
 		<thead>
 			<tr>
-				<th>Entry Type</th>
-				<th>Sections</th>
-				<th>Robots</th>
-				<th>Title Pattern</th>
-				<th>Description</th>
-				<th>Image</th>
+				<th>{{ 'Entry Type'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Sections'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Robots'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Title Pattern'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Description'|t('meierlabs-seo') }}</th>
+				<th>{{ 'Image'|t('meierlabs-seo') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -29,7 +28,7 @@
 						<div class="light smalltext code">{{ row.type.handle }}</div>
 					</th>
 					<td class="light">{{ row.sections|map(s => s.name|t('site'))|join(', ') }}</td>
-					<td>{% if data.robots ?? false %}{{ data.robots }}{% else %}<span class="light">Inherit</span>{% endif %}</td>
+					<td>{% if data.robots ?? false %}{{ data.robots }}{% else %}<span class="light">{{ 'Inherit'|t('meierlabs-seo') }}</span>{% endif %}</td>
 					<td><code>{{ data.titlePattern ?? '' }}</code></td>
 					<td>
 						{% if data.descriptionField ?? false %}<code>{{ data.descriptionField }}</code>{% elseif data.description ?? false %}✓{% endif %}
@@ -39,7 +38,7 @@
 					</td>
 				</tr>
 			{% else %}
-				<tr><td colspan="6" class="light">No entry types in sections with URLs.</td></tr>
+				<tr><td colspan="6" class="light">{{ 'No entry types in sections with URLs.'|t('meierlabs-seo') }}</td></tr>
 			{% endfor %}
 		</tbody>
 	</table>

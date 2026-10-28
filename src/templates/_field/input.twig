@@ -23,8 +23,8 @@
 	{% endif %}
 
 	{{ forms.textField({
-		label: 'Title',
-		instructions: defaults ? 'Replaces `{title}` in the title pattern: `' ~ defaults.titlePrefix ~ '{title}' ~ defaults.titleSuffix ~ '`' : null,
+		label: 'Title'|t('meierlabs-seo'),
+		instructions: defaults ? 'Replaces `{title}` in the title pattern:'|t('meierlabs-seo') ~ ' `' ~ defaults.titlePrefix ~ '{title}' ~ defaults.titleSuffix ~ '`' : null,
 		name: name ~ '[title]',
 		value: value.title,
 		placeholder: defaults.title ?? null,
@@ -34,7 +34,7 @@
 	}) }}
 
 	{{ forms.textareaField({
-		label: 'Description',
+		label: 'Description'|t('meierlabs-seo'),
 		name: name ~ '[description]',
 		value: value.description,
 		placeholder: defaults.description ?? null,
@@ -45,9 +45,9 @@
 	}) }}
 
 	{{ forms.elementSelectField({
-		label: 'Image',
+		label: 'Image'|t('meierlabs-seo'),
 		instructions: defaults and defaults.image
-			? 'Default: ' ~ defaults.image.title
+			? 'Default:'|t('meierlabs-seo') ~ ' ' ~ defaults.image.title
 			: null,
 		name: name ~ '[imageId]',
 		elementType: 'craft\\elements\\Asset',
@@ -57,24 +57,24 @@
 	}) }}
 
 	<details class="mlseo-advanced"{% if value.socialTitle or value.socialDescription or socialImage or value.robots or value.canonicalUrl %} open{% endif %}>
-		<summary>Social and advanced</summary>
+		<summary>{{ 'Social and advanced'|t('meierlabs-seo') }}</summary>
 
 		{{ forms.textField({
-			label: 'Social Title',
-			instructions: 'When shared (Open Graph), defaults to the title.',
+			label: 'Social Title'|t('meierlabs-seo'),
+			instructions: 'When shared (Open Graph), defaults to the title.'|t('meierlabs-seo'),
 			name: name ~ '[socialTitle]',
 			value: value.socialTitle,
 		}) }}
 
 		{{ forms.textareaField({
-			label: 'Social Description',
+			label: 'Social Description'|t('meierlabs-seo'),
 			name: name ~ '[socialDescription]',
 			value: value.socialDescription,
 			rows: 2,
 		}) }}
 
 		{{ forms.elementSelectField({
-			label: 'Social Image',
+			label: 'Social Image'|t('meierlabs-seo'),
 			name: name ~ '[socialImageId]',
 			elementType: 'craft\\elements\\Asset',
 			criteria: {kind: ['image']},
@@ -83,16 +83,16 @@
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Robots',
-			instructions: defaults ? 'Inherited: `' ~ defaults.robots ~ '`' : null,
+			label: 'Robots'|t('meierlabs-seo'),
+			instructions: defaults ? 'Inherited:'|t('meierlabs-seo') ~ ' `' ~ defaults.robots ~ '`' : null,
 			name: name ~ '[robots]',
 			options: robotsOptions,
 			value: value.robots ?? '',
 		}) }}
 
 		{{ forms.textField({
-			label: 'Canonical URL',
-			instructions: 'Only if this page is a copy of another one; it is then left out of the sitemap.',
+			label: 'Canonical URL'|t('meierlabs-seo'),
+			instructions: 'Only if this page is a copy of another one; it is then left out of the sitemap.'|t('meierlabs-seo'),
 			name: name ~ '[canonicalUrl]',
 			value: value.canonicalUrl,
 			placeholder: defaults.canonicalUrl ?? null,

@@ -115,26 +115,32 @@ class SeoResult
 
 		$org = null;
 		if (!empty($sd['name'])) {
+			$type = ($sd['type'] ?? null) ?: 'Organization';
+			$isPerson = $type === 'Person';
+			$isLocal = in_array($type, MeierLabsSeo::$plugin->seo->localBusinessTypes(), true);
+
 			$org = array_filter([
-				'@type' => ($sd['type'] ?? null) ?: 'Organization',
+				'@type' => $type,
 				'@id' => $baseUrl . '#organization',
 				'name' => $sd['name'],
 				'alternateName' => $sd['alternateName'] ?? null,
-				'legalName' => $sd['legalName'] ?? null,
+				'legalName' => !$isPerson ? ($sd['legalName'] ?? null) : null,
 				'description' => $sd['description'] ?? null,
 				'url' => ($sd['url'] ?? null) ?: $baseUrl,
-				'logo' => $this->imageObject(MeierLabsSeo::$plugin->seo->asset($sd['logoId'] ?? null)),
+				'logo' => !$isPerson
+					? $this->imageObject(MeierLabsSeo::$plugin->seo->asset($sd['logoId'] ?? null))
+					: null,
 				'image' => $this->imageObject(MeierLabsSeo::$plugin->seo->asset($sd['imageId'] ?? null)),
 				'email' => $sd['email'] ?? null,
 				'telephone' => $sd['telephone'] ?? null,
 				'address' => $this->address($sd),
-				'geo' => !empty($sd['latitude']) && !empty($sd['longitude']) ? [
+				'geo' => $isLocal && !empty($sd['latitude']) && !empty($sd['longitude']) ? [
 					'@type' => 'GeoCoordinates',
 					'latitude' => (float)$sd['latitude'],
 					'longitude' => (float)$sd['longitude'],
 				] : null,
-				'openingHoursSpecification' => $this->openingHours($sd),
-				'priceRange' => $sd['priceRange'] ?? null,
+				'openingHoursSpecification' => $isLocal ? $this->openingHours($sd) : null,
+				'priceRange' => $isLocal ? ($sd['priceRange'] ?? null) : null,
 				'sameAs' => array_values(array_filter(array_map(
 					fn($row) => trim($row['url'] ?? ''),
 					is_array($sd['sameAs'] ?? null) ? $sd['sameAs'] : []

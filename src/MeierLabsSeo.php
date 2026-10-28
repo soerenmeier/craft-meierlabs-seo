@@ -90,7 +90,7 @@ class MeierLabsSeo extends Plugin
 				$event->permissions[] = [
 					'heading' => 'Meier Labs SEO',
 					'permissions' => [
-						self::PERMISSION => ['label' => 'Edit the SEO settings'],
+						self::PERMISSION => ['label' => Craft::t('meierlabs-seo', 'Edit the SEO settings')],
 					],
 				];
 			}
@@ -153,12 +153,12 @@ class MeierLabsSeo extends Plugin
 		}
 
 		$item = parent::getCpNavItem();
-		$item['label'] = 'SEO';
+		$item['label'] = Craft::t('meierlabs-seo', 'SEO');
 		$item['subnav'] = [
-			'global' => ['label' => 'Global', 'url' => 'meierlabs-seo/global'],
-			'sections' => ['label' => 'Sections', 'url' => 'meierlabs-seo/sections'],
-			'entry-types' => ['label' => 'Entry Types', 'url' => 'meierlabs-seo/entry-types'],
-			'structured-data' => ['label' => 'Structured Data', 'url' => 'meierlabs-seo/structured-data'],
+			'global' => ['label' => Craft::t('meierlabs-seo', 'Global'), 'url' => 'meierlabs-seo/global'],
+			'sections' => ['label' => Craft::t('meierlabs-seo', 'Sections'), 'url' => 'meierlabs-seo/sections'],
+			'entry-types' => ['label' => Craft::t('meierlabs-seo', 'Entry Types'), 'url' => 'meierlabs-seo/entry-types'],
+			'structured-data' => ['label' => Craft::t('meierlabs-seo', 'Structured Data'), 'url' => 'meierlabs-seo/structured-data'],
 		];
 
 		return $item;
@@ -178,7 +178,9 @@ class MeierLabsSeo extends Plugin
 
 	public function registerCpAssets(): void
 	{
-		Craft::$app->getView()->registerAssetBundle(CpAsset::class);
+		$view = Craft::$app->getView();
+		$view->registerAssetBundle(CpAsset::class);
+		$view->registerTranslations('meierlabs-seo', ['full title']);
 	}
 
 	protected function createSettingsModel(): ?Model
