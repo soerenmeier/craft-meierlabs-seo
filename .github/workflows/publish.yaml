@@ -6,9 +6,9 @@ on:
       - 'meierlabs-seo@v*.*.*' # the npm package, e.g. meierlabs-seo@v0.1.0-alpha.0
 
 env:
-  # The first publish runs with the NPM_TOKEN secret and without
-  # provenance. Afterwards set up Trusted Publishing for the package on
-  # npmjs.com and set this to 'true'.
+  # Publishing uses npm Trusted Publishing (no token). npm only adds
+  # provenance for public repositories: set this to 'true' once the repo
+  # is public.
   PROVENANCE: 'false'
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
 
     permissions:
       contents: read # Allow reading the repository content
-      id-token: write # Required for provenance and Trusted Publishing
+      id-token: write # Required for Trusted Publishing and provenance
     container:
       image: node:24
 
@@ -95,5 +95,3 @@ jobs:
             echo "Stable release detected. Publishing to latest tag."
             npm publish ${ARGS}
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
