@@ -121,14 +121,6 @@ return [
 ];
 ```
 
-## Moving from SEOmatic
-
-Change the type of the SEOmatic field to "SEO" (the values are not taken
-over, SEOmatic's per entry overrides are rarely used), uninstall SEOmatic,
-then set up the global, section and entry type settings, e.g. the field
-mappings that SEOmatic did with `extractTextFromField`. In crelte replace
-`@dark-crelte/extras/seomatic` with `meierlabs-seo` as shown above.
-
 ## Roadmap
 
 - More structured data (products, articles, events, FAQ)

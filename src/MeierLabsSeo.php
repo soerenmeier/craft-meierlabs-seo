@@ -102,7 +102,7 @@ class MeierLabsSeo extends Plugin
 			TypeManager::EVENT_DEFINE_GQL_TYPE_FIELDS,
 			function (DefineGqlTypeFieldsEvent $event) {
 				// also on the entry types, so a leftover content field
-				// called `seo` (e.g. from SEOmatic) doesn't hide it
+				// called `seo` from another plugin doesn't hide it
 				if ($event->typeName !== 'EntryInterface' && !str_ends_with($event->typeName, '_Entry')) {
 					return;
 				}
